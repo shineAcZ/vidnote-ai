@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidNote AI</title>
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">V</div>
+        <div>
+          <strong>VidNote AI</strong>
+          <span>视频字幕与笔记</span>
+        </div>
+      </div>
+      <button id="refreshContext" class="icon-button" title="重新读取当前视频" aria-label="重新读取当前视频">↻</button>
+    </header>
+
+    <section id="videoCard" class="video-card" aria-live="polite">
+      <div class="skeleton-line wide"></div>
+      <div class="skeleton-line"></div>
+      <p>正在读取当前视频…</p>
+    </section>
+
+    <nav class="tabs" aria-label="功能导航">
+      <button class="tab active" data-tab="note">AI 笔记</button>
+      <button class="tab" data-tab="transcript">完整字幕</button>
+      <button class="tab" data-tab="tasks">任务</button>
+      <button class="tab" data-tab="prompts">提示词</button>
+      <button class="tab" data-tab="settings">设置</button>
+    </nav>
+
+    <main>
+      <section id="tab-note" class="tab-panel active">
+        <div class="section-heading">
+          <div>
+            <h1>生成视频笔记</h1>
+            <p>选择整理方式，AI 会按字幕顺序生成带时间戳的 Markdown。</p>
+          </div>
+        </div>
+
+        <div class="generator-card">
+          <label for="notePrompt">生成方式</label>
+          <select id="notePrompt"></select>
+          <button id="startGeneration" class="primary-button" disabled>
+            <span aria-hidden="true">✦</span> 开始生成
+          </button>
+          <p id="generationHint" class="hint">请先读取一条字幕轨。</p>
+        </div>
+
+        <section id="progressCard" class="progress-card hidden" aria-live="polite">
+          <div class="progress-top">
+            <div class="activity-dot"></div>
+            <div class="progress-title">
+              <strong id="progressStage">准备任务</strong>
+              <span id="progressElapsed">已运行 00:00</span>
+            </div>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track"><div id="progressBar"></div></div>
+          <div class="progress-details">
+            <span id="progressChunk">字幕块 0 / 0</span>
+            <span id="progressActivity">正在准备…</span>
+          </div>
+          <details id="parallelDetails" class="parallel-details" open>
+            <summary>
+              <span>并行任务详情</span>
+              <span id="parallelSummary">等待开始</span>
+            </summary>
+            <div id="parallelJobs" class="parallel-jobs"></div>
+          </details>
+          <div class="progress-actions">
+            <button id="pauseGeneration" class="secondary-button">暂停</button>
+            <button id="cancelGeneration" class="text-button danger">停止并保留结果</button>
+          </div>
+        </section>
+
+        <section id="noteResult" class="result-card hidden">
+          <div class="result-toolbar">
+            <div>
+              <strong id="noteStatusTitle">笔记</strong>
+              <span id="noteStats"></span>
+            </div>
+            <div class="toolbar-actions">
+              <button id="copyNote" class="compact-button">复制</button>
+              <button id="downloadNote" class="compact-button primary-compact">导出 Obsidian</button>
+            </div>
+          </div>
+          <article id="notePreview" class="markdown-body"></article>
+        </section>
+
+        <section id="noteLibrary" class="note-library hidden">
+          <div class="note-library-heading">
+            <div>
+              <strong>已保存的笔记</strong>
+              <span id="noteLibraryCount">0 份</span>
+            </div>
+            <span>点击笔记即可展开或折叠</span>
+          </div>
+          <div id="noteLibraryList" class="note-library-list"></div>
+        </section>
+
+        <div id="noteEmpty" class="empty-state">
+          <div class="empty-illustration" aria-hidden="true">✦</div>
+          <h2>让视频变成可阅读的笔记</h2>
+          <p>读取字幕后即可生成。完成的段落会随时保存在本地，即使请求中断也可以继续。</p>
+        </div>
+      </section>
+
+      <section id="tab-transcript" class="tab-panel">
+        <div class="section-heading">
+          <div>
+            <h1>完整字幕</h1>
+            <p>点击任意字幕即可跳转到视频中的对应位置。</p>
+          </div>
+        </div>
+
+        <div class="transcript-controls">
+          <label for="trackSelect">字幕语言</label>
+          <div class="control-row">
+            <select id="trackSelect"><option value="">暂无字幕轨</option></select>
+            <button id="loadTrack" class="secondary-button">读取</button>
+          </div>
+          <label class="file-button" for="subtitleFile">或导入 SRT / VTT</label>
+          <input id="subtitleFile" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip">
+          <div class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="transcriptSearch" type="search" placeholder="搜索字幕内容…" autocomplete="off">
+            <button id="goCurrentCue" class="compact-button" title="定位到当前播放字幕">定位当前</button>
+          </div>
+        </div>
+
+        <div id="transcriptSummary" class="list-summary">尚未读取字幕</div>
+        <button id="playbackPosition" class="playback-position hidden" title="点击定位到当前播放字幕">
+          <span id="playbackTimeLabel">当前 00:00:00</span>
+          <span class="playback-rail" aria-hidden="true">
+            <span id="playbackProgress"></span>
+            <i id="playbackMarker"></i>
+          </span>
+          <span id="playbackPercent">0%</span>
+        </button>
+        <div id="transcriptList" class="transcript-list"></div>
+        <div id="transcriptEmpty" class="empty-state compact">
+          <div class="empty-illustration" aria-hidden="true">CC</div>
+          <h2>还没有字幕</h2>
+          <p>选择网页提供的字幕语言，或者导入本地 SRT/VTT 文件。</p>
+        </div>
+      </section>
+
+      <section id="tab-tasks" class="tab-panel">
+        <div class="section-heading">
+          <div>
+            <h1>生成任务</h1>
+            <p>查看历史任务，并从上一个已完成片段继续。</p>
+          </div>
+        </div>
+        <div id="taskList" class="task-list"></div>
+        <div id="taskEmpty" class="empty-state compact">
+          <div class="empty-illustration" aria-hidden="true">✓</div>
+          <h2>暂无任务</h2>
+          <p>开始生成笔记后，任务状态会显示在这里。</p>
+        </div>
+      </section>
+
+      <section id="tab-prompts" class="tab-panel">
+        <div class="section-heading">
+          <div>
+            <h1>提示词库</h1>
+            <p>修改内置提示词，或者创建适合不同视频的新模板。</p>
+          </div>
+          <button id="newPrompt" class="compact-button">新建</button>
+        </div>
+
+        <form id="promptForm" class="form-card">
+          <label for="promptSelect">选择模板</label>
+          <select id="promptSelect"></select>
+          <label for="promptName">模板名称</label>
+          <input id="promptName" required maxlength="60">
+          <label for="promptMode">笔记类型</label>
+          <select id="promptMode">
+            <option value="detailed">详尽笔记</option>
+            <option value="summary">精简总结</option>
+          </select>
+          <div class="settings-group prompt-strategy">
+            <strong>生成策略</strong>
+            <label class="check-row">
+              <input id="promptSegmented" type="checkbox">
+              使用分段生成策略
+            </label>
+            <span>默认关闭：整份字幕一次生成，速度快且结构更连贯。开启后会分块并发整理并执行最终合并，适合超出模型上下文的长视频。</span>
+          </div>
+          <label for="systemPrompt">系统提示词</label>
+          <textarea id="systemPrompt" rows="6"></textarea>
+          <label id="chunkPromptLabel" for="chunkPrompt">完整字幕生成提示词</label>
+          <textarea id="chunkPrompt" rows="12"></textarea>
+          <div id="mergePromptFields" class="prompt-field-group">
+            <label for="mergePrompt">最终合并提示词</label>
+            <textarea id="mergePrompt" rows="8"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-button">保存模板</button>
+            <button type="button" id="deletePrompt" class="text-button danger">删除</button>
+            <button type="button" id="resetPrompts" class="text-button">恢复内置模板</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="tab-settings" class="tab-panel">
+        <div class="section-heading">
+          <div>
+            <h1>AI 设置</h1>
+            <p>密钥仅保存在本机扩展存储中，不会写入日志。</p>
+          </div>
+        </div>
+
+        <form id="settingsForm" class="form-card" novalidate>
+          <label for="provider">服务商</label>
+          <select id="provider">
+            <option value="deepseek">DeepSeek</option>
+            <option value="custom">其他 OpenAI-compatible 服务</option>
+          </select>
+          <label for="baseUrl">API 地址</label>
+          <input id="baseUrl" type="url" placeholder="https://api.deepseek.com" required>
+          <label for="apiKey">API 密钥</label>
+          <div class="password-field">
+            <input id="apiKey" type="password" autocomplete="off" placeholder="sk-…">
+            <button id="toggleApiKey" type="button" class="compact-button">显示</button>
+          </div>
+          <label for="model">模型名称</label>
+          <input id="model" placeholder="deepseek-v4-flash" required>
+
+          <div id="deepseekThinkingGroup" class="settings-group">
+            <strong>DeepSeek 思考模式</strong>
+            <label class="check-row">
+              <input id="deepseekThinking" type="checkbox">
+              启用思考模式
+            </label>
+            <label for="reasoningEffort">思考强度</label>
+            <select id="reasoningEffort">
+              <option value="high">高（更快）</option>
+              <option value="max">最大（更充分）</option>
+            </select>
+            <span>开启后通常更适合长字幕整理，但会增加等待时间和 Token 消耗。生成时仅显示“AI 正在思考”，不会展示内部推理文本。</span>
+          </div>
+
+          <details>
+            <summary>高级设置</summary>
+            <div class="details-content">
+              <label for="temperature">随机性 <span id="temperatureValue">0.2</span></label>
+              <input id="temperature" type="range" min="0" max="1" step="0.1">
+              <label for="maxTokens">单次最大输出 Token</label>
+              <input id="maxTokens" type="number" min="512" max="384000" step="1">
+              <span class="field-help">DeepSeek V4 最大输出为 384K。默认使用 384,000；模型自然完成时会提前停止，不会因为上限较大而强制生成到上限。</span>
+              <label for="chunkChars">每个字幕块字符数</label>
+              <input id="chunkChars" type="number" min="2000" max="800000" step="1">
+              <span class="field-help">默认 30,000 字符，减少过小分块，同时让长视频仍可并发处理；可提高到 800,000。输入与输出共同占用 1M 上下文，使用极大字幕块时应适当降低最大输出。</span>
+              <label for="concurrency">字幕块并发请求数</label>
+              <input id="concurrency" type="number" min="1" max="2500" step="1">
+              <span class="field-help">可设置 1–2500，默认 8。DeepSeek Flash 账号上限 2500、Pro 上限 500；实际请求数不会超过剩余字幕块。遇到 429/503 会自动降低并发并重试。同一账号的所有 API Key 共用额度，高并发也会增加本机占用和瞬时 Token 消耗。</span>
+              <label class="check-row">
+                <input id="playOnSeek" type="checkbox">
+                点击时间戳后自动播放
+              </label>
+            </div>
+          </details>
+
+          <div class="settings-group">
+            <strong>字幕行为</strong>
+            <label class="check-row">
+              <input id="autoReadSubtitles" type="checkbox">
+              打开插件时自动读取字幕
+            </label>
+            <span>关闭后仍会显示已经保存的字幕，新视频需要在“完整字幕”中手动点击“读取”。</span>
+          </div>
+
+          <div class="settings-group">
+            <strong>外观</strong>
+            <label for="theme">界面主题</label>
+            <select id="theme">
+              <option value="system">跟随系统</option>
+              <option value="light">日间模式</option>
+              <option value="dark">夜间模式</option>
+            </select>
+            <span>切换后立即生效，并保存在本机。</span>
+          </div>
+
+          <div class="privacy-note">
+            <strong>发送范围</strong>
+            <p>生成笔记时，视频标题和字幕会发送给你选择的 AI 服务。不会发送网页 Cookie 或账号信息。</p>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary-button">保存设置</button>
+            <button type="button" id="testConnection" class="secondary-button">测试连接</button>
+          </div>
+          <p id="settingsStatus" class="form-status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

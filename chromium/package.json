@@ -1,0 +1,9 @@
+{
+  "name": "vidnote-ai-chromium",
+  "version": "0.1.16",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/smoke.mjs"
+  }
+}
