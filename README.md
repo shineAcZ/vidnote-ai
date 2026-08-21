@@ -1,5 +1,7 @@
 # VidNote AI
 
+[English](README.en.md) | **简体中文**
+
 将 Bilibili 和 YouTube 视频字幕整理成结构清晰、能够跳回原视频的 Markdown 笔记。
 
 VidNote AI 是一个本地优先的开源浏览器扩展。它可以读取视频字幕，在侧边栏中展示完整文字稿，并调用用户自行配置的 DeepSeek 或其他 OpenAI-compatible API 生成视频笔记。生成结果可以在浏览器中保存和阅读，也可以导出给 Obsidian 使用。
@@ -243,7 +245,8 @@ npm test
 ├─ docs/              维护和发布文档
 ├─ PRIVACY.md         隐私政策
 ├─ LICENSE            MIT License
-└─ README.md
+├─ README.en.md       英文说明
+└─ README.md          简体中文说明
 ```
 
 扩展商店打包、审核和发布说明见 [`docs/STORE_SUBMISSION.md`](docs/STORE_SUBMISSION.md)。
