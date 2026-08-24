@@ -6,8 +6,8 @@
 
 1. 创建公开或私有 GitHub 仓库。
 2. 上传本项目源码，但不要上传 API Key、测试账号、Cookie 或个人字幕。
-3. 创建 `v0.1.16` Release。
-4. 上传 Chrome/Edge 通用 ZIP 和 Firefox XPI/ZIP。
+3. 创建与清单版本一致的 Release，例如 `v0.1.17`。
+4. 上传 Chromium 通用 ZIP 和经过 Mozilla 签名的 Firefox XPI；审核前也可附带 Firefox 源 ZIP。
 5. 在 Release Notes 中写明版本、安装方法、已知限制和 SHA-256。
 
 Chrome/Edge 用户必须先解压 ZIP，然后在开发者模式中“加载已解压的扩展”。普通 Chrome/Edge 默认不会把 GitHub ZIP 当作商店扩展永久安装。

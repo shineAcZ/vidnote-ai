@@ -1,11 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="VidNote AI">
-  <defs>
-    <linearGradient id="g" x1="20" y1="12" x2="108" y2="116" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8b7cff"/>
-      <stop offset="1" stop-color="#4b3cc6"/>
-    </linearGradient>
-  </defs>
-  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#g)"/>
-  <path d="M31 32h18l15 49 15-49h18L74 97H54L31 32Z" fill="#fff"/>
-  <circle cx="98" cy="30" r="9" fill="#bff7e8"/>
+  <g fill="none" stroke="#4657B8" stroke-linecap="round" stroke-width="9">
+    <path d="M50 34 36 16"/>
+    <path d="m78 34 14-18"/>
+  </g>
+  <circle cx="34" cy="14" r="7" fill="#4657B8"/>
+  <circle cx="94" cy="14" r="7" fill="#4657B8"/>
+  <rect x="9" y="29" width="110" height="88" rx="25" fill="#4657B8"/>
+  <rect x="27" y="108" width="13" height="16" rx="6" fill="#4657B8"/>
+  <rect x="88" y="108" width="13" height="16" rx="6" fill="#4657B8"/>
+  <rect x="20" y="39" width="88" height="66" rx="18" fill="#6C5CE7" stroke="#FFFFFF" stroke-width="5"/>
+  <path d="M42 61h17c5 0 8 3 8 8v10c0 5 3 8 8 8h12" fill="none" stroke="#35D6E8" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+  <circle cx="40" cy="61" r="9" fill="#35D6E8"/>
+  <circle cx="89" cy="87" r="9" fill="#35D6E8"/>
+  <path d="m87 52 2.6 6.4L96 61l-6.4 2.6L87 70l-2.6-6.4L78 61l6.4-2.6Z" fill="#35D6E8"/>
 </svg>

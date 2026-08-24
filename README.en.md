@@ -2,6 +2,10 @@
 
 **English** | [简体中文](README.md)
 
+<p align="center">
+  <img src="docs/branding/vidnote-ai-icon.png" width="128" height="128" alt="VidNote AI icon">
+</p>
+
 Turn Bilibili and YouTube subtitles into well-structured Markdown notes with timestamps that link back to the original video.
 
 VidNote AI is a local-first, open-source browser extension. It reads video subtitles, displays the complete transcript in a sidebar, and generates video notes through DeepSeek or another OpenAI-compatible API configured by the user. Notes can be saved and read in the browser or exported for use in Obsidian.
