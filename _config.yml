@@ -1,0 +1,9 @@
+title: VidNote AI
+description: Video transcripts and timestamped AI notes
+theme: jekyll-theme-cayman
+lang: zh-CN
+repository: shineAcZ/vidnote-ai
+exclude:
+  - chromium
+  - firefox
+  - node_modules
