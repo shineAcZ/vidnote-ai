@@ -1,6 +1,6 @@
 # VidNote AI Firefox 版
 
-Firefox Manifest V3 测试版（0.1.17）。支持读取视频字幕、点击字幕跳转、调用 DeepSeek 或其他 OpenAI-compatible AI 生成带时间戳的 Markdown 笔记，并导出为 Obsidian Media Extended 兼容文件。
+Firefox Manifest V3 测试版（0.1.18）。支持读取视频字幕、点击字幕跳转、调用 DeepSeek 或其他 OpenAI-compatible AI 生成带时间戳的 Markdown 笔记，并导出为 Obsidian Media Extended 兼容文件。
 
 ## 快速安装测试
 
@@ -190,6 +190,11 @@ Firefox 140 及更高版本会显示数据传输声明：
 
 - 启用新的电视与 AI 电路项目图标，在亮色和暗色背景下都保持良好辨识度。
 - 同步更新简体中文和英文公开项目文档。
+
+## 0.1.18 改进
+
+- 将侧边栏页面内写死的旧 “V” 标记替换为正式项目图标。
+- 为 Firefox 原生侧边栏标题栏提供多尺寸图标配置，并增加页面图标兜底。
 
 ## 0.1.10 改进
 

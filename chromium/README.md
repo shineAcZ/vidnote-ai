@@ -1,6 +1,6 @@
 # VidNote AI Chromium 版
 
-适用于 Google Chrome 116+ 与基于相同 Chromium 能力的 Microsoft Edge。当前版本：`0.1.17`。
+适用于 Google Chrome 116+ 与基于相同 Chromium 能力的 Microsoft Edge。当前版本：`0.1.18`。
 
 完整功能、隐私和发布说明请查看 GitHub 仓库根目录 README。本目录是可直接加载和打包的 Chromium Manifest V3 扩展源码。
 
@@ -40,6 +40,8 @@ YouTube 使用带 `exp=xpe` 的新版受保护字幕地址时，本版本会自�
 0.1.16 提前捕获播放器成功返回的 YouTube 字幕正文，并通过临时网络观察复用带短期令牌的实际字幕 URL，提高字幕读取稳定性。
 
 0.1.17 启用新的电视与 AI 电路项目图标，并同步更新中英文公开项目文档。
+
+0.1.18 将侧边栏页面内写死的旧 “V” 标记替换为正式项目图标，并补齐浏览器侧栏页面图标。
 
 请勿把真实 API Key 写进源码或提交到 GitHub。
 

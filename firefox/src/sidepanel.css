@@ -93,15 +93,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  color: white;
-  background: linear-gradient(145deg, #796aff, #4b3cc6);
-  border-radius: 11px;
-  font-weight: 800;
-  box-shadow: 0 5px 15px rgba(102, 87, 232, .3);
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: block;
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 4px 10px rgba(70, 87, 184, .28));
 }
 .brand strong, .brand span { display: block; }
 .brand strong { font-size: 15px; }

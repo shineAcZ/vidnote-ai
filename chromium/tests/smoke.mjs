@@ -110,6 +110,8 @@ assert.match(sidepanelSource, /await runConnectionTest\(state\.settings\)/);
 assert.match(sidepanelSource, /validateSettingsValues\(values\)/);
 assert.match(sidepanelSource, /oneShot:\s*!\$\("#promptSegmented"\)\.checked/);
 assert.match(sidepanelHtml, /<form id="settingsForm"[^>]*novalidate/);
+assert.match(sidepanelHtml, /class="brand-mark"[^>]+src="\.\.\/assets\/icon-48\.png"/);
+assert.doesNotMatch(sidepanelHtml, /class="brand-mark"[^>]*>V<\/div>/);
 assert.match(sidepanelHtml, /id="promptSegmented"/);
 assert.doesNotMatch(sidepanelHtml, /id="promptOneShot"/);
 assertNumberInputAcceptsDefault(sidepanelHtml, "maxTokens", DEFAULT_SETTINGS.maxTokens);
